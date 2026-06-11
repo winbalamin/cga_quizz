@@ -72,7 +72,7 @@ export async function gradeSession(sessionId: string) {
           .filter((c: { isCorrect: boolean; text: string }) => c.isCorrect)
           .map((c: { text: string }) => c.text.trim().toLowerCase())
         const userAnswer = response.answer.trim().toLowerCase()
-        if (correctAnswers.some((ca) => ca === userAnswer)) {
+        if (correctAnswers.some((ca: string) => ca === userAnswer)) {
           isCorrect = true
           score = 1
         }
