@@ -79,15 +79,15 @@ export default function AdminResultsPage() {
 
   return (
     <div>
-      <div className="flex items-center justify-between mb-6">
-        <h1 className="text-2xl font-bold">Results</h1>
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between mb-6">
+        <h1 className="text-xl sm:text-2xl font-bold">Results</h1>
         <Button onClick={handleExport} disabled={isExporting || results.length === 0}>
           <Download className="mr-2 h-4 w-4" />
           {isExporting ? "Exporting..." : "Export CSV"}
         </Button>
       </div>
 
-      <Card>
+      <Card className="motion-fade-in-up motion-delay-1">
         <CardHeader>
           <CardTitle>All Results</CardTitle>
         </CardHeader>
@@ -103,6 +103,7 @@ export default function AdminResultsPage() {
               No completed quizzes yet.
             </p>
           ) : (
+            <div className="overflow-x-auto">
             <Table>
               <TableHeader>
                 <TableRow>
@@ -134,6 +135,7 @@ export default function AdminResultsPage() {
                 ))}
               </TableBody>
             </Table>
+            </div>
           )}
         </CardContent>
       </Card>

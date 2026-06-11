@@ -128,7 +128,7 @@ function QuizContent() {
   if (examStatus === "ended") {
     return (
       <div className="flex min-h-screen items-center justify-center">
-        <div className="text-center space-y-4">
+        <div className="text-center space-y-4 motion-scale-in">
           <Clock className="mx-auto h-12 w-12 text-muted-foreground" />
           <p className="text-lg font-medium">Exam has ended</p>
           <p className="text-sm text-muted-foreground">
@@ -145,7 +145,7 @@ function QuizContent() {
   if (examStatus === "idle") {
     return (
       <div className="flex min-h-screen items-center justify-center">
-        <div className="text-center space-y-4">
+        <div className="text-center space-y-4 motion-scale-in">
           <Clock className="mx-auto h-12 w-12 animate-pulse text-muted-foreground" />
           <p className="text-lg font-medium">Waiting for exam to start</p>
           <p className="text-sm text-muted-foreground">
@@ -160,7 +160,7 @@ function QuizContent() {
   if (isInitializing) {
     return (
       <div className="flex min-h-[60vh] items-center justify-center">
-        <p className="text-muted-foreground">Loading questions...</p>
+        <p className="text-muted-foreground motion-fade-in animate-pulse">Loading questions...</p>
       </div>
     )
   }
@@ -168,7 +168,7 @@ function QuizContent() {
   return (
     <div className="space-y-6 py-6">
       {phone && <QuizWatermark phone={phone} />}
-      <div className="space-y-3">
+      <div className="space-y-3 motion-slide-in-down">
         <QuizTimer
           timeLeft={timeLeft}
           formatted={formatted}
@@ -180,7 +180,7 @@ function QuizContent() {
 
       {currentQuestion && (
         <div className="space-y-6">
-          <div className="flex items-center justify-between">
+          <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
             <span className="text-sm text-muted-foreground">
               Question {currentIndex + 1} of {questions.length}
             </span>
@@ -191,19 +191,23 @@ function QuizContent() {
               disabled={answeredCount === 0}
             >
               <Flag className="mr-1 h-3 w-3" />
-              Skip to next unanswered
+              <span className="hidden sm:inline">Skip to next unanswered</span>
+              <span className="sm:hidden">Skip ahead</span>
             </Button>
           </div>
 
-          <QuestionCard
-            question={currentQuestion}
-            savedAnswer={answers[currentQuestion.id] ?? null}
-            onAnswer={(answer) => handleAnswer(currentQuestion.id, answer)}
-          />
+          <div key={currentIndex} className="motion-question-enter">
+            <QuestionCard
+              question={currentQuestion}
+              savedAnswer={answers[currentQuestion.id] ?? null}
+              onAnswer={(answer) => handleAnswer(currentQuestion.id, answer)}
+            />
+          </div>
 
-          <div className="flex items-center justify-between pt-4">
+          <div className="flex flex-col-reverse gap-2 sm:flex-row sm:items-center sm:justify-between pt-4">
             <Button
               variant="outline"
+              className="motion-press"
               onClick={() => goTo(currentIndex - 1)}
               disabled={isFirst}
             >
@@ -213,13 +217,14 @@ function QuizContent() {
 
             {isLast ? (
               <Button
+                className="motion-press"
                 onClick={handleSubmit}
                 disabled={isSubmitting || isExpired}
               >
                 {isSubmitting ? "Submitting..." : "Submit Quiz"}
               </Button>
             ) : (
-              <Button onClick={() => goTo(currentIndex + 1)}>
+              <Button className="motion-press" onClick={() => goTo(currentIndex + 1)}>
                 Next
                 <ChevronRight className="ml-1 h-4 w-4" />
               </Button>

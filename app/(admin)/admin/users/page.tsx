@@ -26,13 +26,14 @@ export default async function AdminUsersPage() {
   const users = await getUsers()
 
   return (
-    <div>
+    <div className="motion-fade-in-up">
       <h1 className="text-2xl font-bold mb-6">Users</h1>
 
       {users.length === 0 ? (
         <p className="text-muted-foreground">No users registered yet.</p>
       ) : (
-        <Table>
+        <div className="overflow-x-auto">
+          <Table>
           <TableHeader>
             <TableRow>
               <TableHead>Name</TableHead>
@@ -74,6 +75,7 @@ export default async function AdminUsersPage() {
             })}
           </TableBody>
         </Table>
+        </div>
       )}
     </div>
   )

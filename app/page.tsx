@@ -57,12 +57,12 @@ export default function LandingPage() {
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-b from-background to-muted p-4">
-      <div className="text-center mb-12">
+      <div className="text-center mb-8 sm:mb-12 motion-fade-in-up">
         <div className="flex items-center justify-center gap-3 mb-4">
-          <Brain className="h-12 w-12 text-primary" />
-          <h1 className="text-4xl font-bold tracking-tight">CGA Quiz</h1>
+          <Brain className="h-10 w-10 sm:h-12 sm:w-12 text-primary" />
+          <h1 className="text-3xl sm:text-4xl font-bold tracking-tight">CGA Quiz</h1>
         </div>
-        <p className="text-lg text-muted-foreground max-w-md">
+        <p className="text-base sm:text-lg text-muted-foreground max-w-md">
           Test your knowledge across multiple domains with our interactive quiz
           platform. You have 30 minutes to complete all questions.
         </p>
@@ -71,7 +71,7 @@ export default function LandingPage() {
       <Dialog open={isOpen} onOpenChange={setIsOpen}>
         <DialogTrigger
           render={
-            <Button size="lg" className="text-lg px-8 py-6">
+            <Button size="lg" className="text-base sm:text-lg px-6 sm:px-8 py-5 sm:py-6 motion-fade-in-up motion-delay-2 motion-press">
               Start Quiz
             </Button>
           }
@@ -120,10 +120,10 @@ export default function LandingPage() {
         </DialogContent>
       </Dialog>
 
-      <div className="mt-4">
+      <div className="mt-4 motion-fade-in-up motion-delay-3">
         <Link
           href="/leaderboard"
-          className={buttonVariants({ variant: "outline", size: "lg" })}
+          className={buttonVariants({ variant: "outline", size: "lg" }) + " motion-press"}
         >
           <Trophy className="mr-2 h-5 w-5" />
           Leaderboard

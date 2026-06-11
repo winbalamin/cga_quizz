@@ -38,9 +38,9 @@ export default async function AdminQuestionsPage() {
   const questions = await getQuestions()
 
   return (
-    <div>
-      <div className="flex items-center justify-between mb-6">
-        <h1 className="text-2xl font-bold">Questions</h1>
+    <div className="motion-fade-in-up">
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between mb-6">
+        <h1 className="text-xl sm:text-2xl font-bold">Questions</h1>
         <div className="flex items-center gap-2">
           <CSVImportDialog />
           <Link
@@ -58,7 +58,8 @@ export default async function AdminQuestionsPage() {
           No questions yet. Create your first question!
         </p>
       ) : (
-        <Table>
+        <div className="overflow-x-auto">
+          <Table>
           <TableHeader>
             <TableRow>
               <TableHead className="w-16">#</TableHead>
@@ -94,6 +95,7 @@ export default async function AdminQuestionsPage() {
             ))}
           </TableBody>
         </Table>
+        </div>
       )}
     </div>
   )

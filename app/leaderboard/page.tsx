@@ -65,9 +65,9 @@ export default function LeaderboardPage() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-background to-muted p-4">
       <div className="mx-auto max-w-3xl py-8">
-        <div className="flex items-center justify-between mb-8">
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between mb-8">
           <div>
-            <h1 className="text-3xl font-bold tracking-tight">Leaderboard</h1>
+            <h1 className="text-2xl sm:text-3xl font-bold tracking-tight">Leaderboard</h1>
             <p className="text-muted-foreground mt-1">
               Top performers ranked by score
             </p>
@@ -78,7 +78,7 @@ export default function LeaderboardPage() {
           </Button>
         </div>
 
-        <Card>
+        <Card className="motion-fade-in-up motion-delay-2">
           <CardHeader>
             <CardTitle>Rankings</CardTitle>
           </CardHeader>
@@ -95,6 +95,7 @@ export default function LeaderboardPage() {
               </p>
             ) : (
               <>
+                <div className="overflow-x-auto -mx-6 px-6">
                 <Table>
                   <TableHeader>
                     <TableRow>
@@ -122,6 +123,7 @@ export default function LeaderboardPage() {
                     ))}
                   </TableBody>
                 </Table>
+                </div>
 
                 {data.totalPages > 1 && (
                   <div className="flex items-center justify-between pt-4">

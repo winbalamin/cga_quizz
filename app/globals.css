@@ -124,3 +124,197 @@ body {
   background: var(--background);
   color: var(--foreground);
 }
+
+/* Motion system */
+@keyframes fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes scale-in {
+  0% {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  60% {
+    opacity: 1;
+    transform: scale(1.02);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes slide-in-right {
+  from { transform: translateX(-100%); }
+  to { transform: translateX(0); }
+}
+
+@keyframes slide-in-down {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+@keyframes question-enter {
+  0% {
+    opacity: 0;
+    transform: translateX(24px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes question-exit {
+  0% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(-24px);
+  }
+}
+
+@keyframes score-reveal {
+  0% {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  60% {
+    opacity: 1;
+    transform: scale(1.05);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes confetti-burst {
+  0% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-40px) scale(0.5);
+  }
+}
+
+/* Entrance animations */
+.motion-fade-in-up {
+  animation: fade-in-up 400ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.motion-fade-in {
+  animation: fade-in 300ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.motion-scale-in {
+  animation: scale-in 300ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.motion-slide-in-down {
+  animation: slide-in-down 250ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.motion-question-enter {
+  animation: question-enter 300ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.motion-question-exit {
+  animation: question-exit 200ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.motion-score-reveal {
+  animation: score-reveal 500ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+/* Stagger delays */
+.motion-delay-1 { animation-delay: 50ms; }
+.motion-delay-2 { animation-delay: 100ms; }
+.motion-delay-3 { animation-delay: 150ms; }
+.motion-delay-4 { animation-delay: 200ms; }
+.motion-delay-5 { animation-delay: 250ms; }
+.motion-delay-6 { animation-delay: 300ms; }
+
+/* Tactile press feedback */
+.motion-press {
+  transition: transform 100ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+.motion-press:active {
+  transform: scale(0.97);
+}
+
+/* Hover lift */
+.motion-lift {
+  transition: transform 200ms cubic-bezier(0.16, 1, 0.3, 1),
+              box-shadow 200ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+.motion-lift:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgb(0 0 0 / 0.08);
+}
+
+/* Skeleton shimmer */
+.motion-shimmer {
+  background: linear-gradient(
+    90deg,
+    var(--muted) 25%,
+    var(--accent) 50%,
+    var(--muted) 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s ease-in-out infinite;
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .motion-fade-in-up,
+  .motion-fade-in,
+  .motion-scale-in,
+  .motion-slide-in-down,
+  .motion-question-enter,
+  .motion-question-exit,
+  .motion-score-reveal {
+    animation: fade-in 150ms ease both;
+    transform: none !important;
+  }
+
+  .motion-press:active {
+    transform: none;
+  }
+
+  .motion-lift:hover {
+    transform: none;
+  }
+
+  .motion-shimmer {
+    animation: none;
+  }
+}

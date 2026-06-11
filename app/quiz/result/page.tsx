@@ -45,14 +45,14 @@ function ResultContent() {
   if (isLoading) {
     return (
       <div className="flex min-h-[60vh] items-center justify-center">
-        <p className="text-muted-foreground">Calculating your score...</p>
+        <p className="text-muted-foreground motion-fade-in animate-pulse">Calculating your score...</p>
       </div>
     )
   }
 
   return (
     <div className="flex min-h-[60vh] items-center justify-center py-12">
-      <Card className="w-full max-w-md text-center">
+      <Card className="w-full max-w-md text-center motion-scale-in">
         <CardHeader>
           <Trophy className="mx-auto h-12 w-12 text-amber-500 mb-2" />
           <CardTitle className="text-2xl">Quiz Complete!</CardTitle>
@@ -61,7 +61,7 @@ function ResultContent() {
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-6">
-          <div>
+          <div className="motion-score-reveal">
             <div className="text-5xl font-bold tabular-nums">
               {result?.correctCount ?? 0}/{result?.totalQuestions ?? 0}
             </div>
@@ -70,7 +70,7 @@ function ResultContent() {
             </p>
           </div>
 
-          <div className="flex justify-center gap-8">
+          <div className="flex justify-center gap-8 motion-fade-in-up motion-delay-2">
             <div className="text-center">
               <CheckCircle2 className="mx-auto h-5 w-5 text-green-500 mb-1" />
               <div className="font-bold tabular-nums">{result?.correctCount ?? 0}</div>
@@ -83,12 +83,13 @@ function ResultContent() {
             </div>
           </div>
 
-          <div className="flex flex-col gap-3 pt-4">
-            <Button onClick={() => router.push("/leaderboard")}>
+          <div className="flex flex-col gap-3 pt-4 motion-fade-in-up motion-delay-3">
+            <Button className="motion-press" onClick={() => router.push("/leaderboard")}>
               View Leaderboard
             </Button>
             <Button
               variant="outline"
+              className="motion-press"
               onClick={() => router.push("/")}
             >
               Return Home

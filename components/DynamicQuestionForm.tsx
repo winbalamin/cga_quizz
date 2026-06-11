@@ -188,7 +188,7 @@ export function DynamicQuestionForm({
               className="space-y-2 !grid-cols-1"
             >
               {choices.map((choice, index) => (
-                <div key={index} className="flex items-center gap-3">
+                <div key={index} className="flex items-center gap-2 sm:gap-3 min-w-0">
                   <RadioGroupItem
                     value={String(index)}
                     id={`choice-${index}`}
@@ -208,6 +208,7 @@ export function DynamicQuestionForm({
                       type="button"
                       variant="ghost"
                       size="icon"
+                      className="shrink-0"
                       onClick={() => removeChoice(index)}
                     >
                       <Trash2 className="h-4 w-4 text-destructive" />
@@ -219,7 +220,7 @@ export function DynamicQuestionForm({
           ) : (
             <div className="space-y-2">
               {choices.map((choice, index) => (
-                <div key={index} className="flex items-center gap-3">
+                <div key={index} className="flex items-center gap-2 sm:gap-3 min-w-0">
                   <Checkbox
                     checked={choice.isCorrect}
                     onCheckedChange={() => toggleCheckboxChoice(index)}
@@ -239,6 +240,7 @@ export function DynamicQuestionForm({
                       type="button"
                       variant="ghost"
                       size="icon"
+                      className="shrink-0"
                       onClick={() => removeChoice(index)}
                     >
                       <Trash2 className="h-4 w-4 text-destructive" />

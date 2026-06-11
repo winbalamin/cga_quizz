@@ -59,8 +59,8 @@ export default async function AdminDashboardPage() {
     <div>
       <h1 className="text-2xl font-bold mb-6">Dashboard</h1>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-        {stats.map((stat) => (
-          <Card key={stat.title}>
+        {stats.map((stat, i) => (
+          <Card key={stat.title} className={`motion-fade-in-up motion-delay-${i + 1} motion-lift`}>
             <CardHeader className="flex flex-row items-center justify-between pb-2">
               <CardTitle className="text-sm font-medium text-muted-foreground">
                 {stat.title}
@@ -73,7 +73,9 @@ export default async function AdminDashboardPage() {
           </Card>
         ))}
       </div>
-      <ExamControl />
+      <div className="motion-fade-in-up motion-delay-5">
+        <ExamControl />
+      </div>
     </div>
   )
 }

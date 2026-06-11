@@ -285,6 +285,7 @@ export function CSVImportZone({ onComplete }: { onComplete: () => void }) {
           )}
 
           <div className="max-h-60 overflow-auto rounded-lg border">
+            <div className="overflow-x-auto">
             <Table>
               <TableHeader>
                 <TableRow>
@@ -328,6 +329,7 @@ export function CSVImportZone({ onComplete }: { onComplete: () => void }) {
                 ))}
               </TableBody>
             </Table>
+            </div>
           </div>
 
           <div className="flex items-center justify-between">
