@@ -1,0 +1,156 @@
+"use client"
+
+import { useState, useEffect, useCallback } from "react"
+import { useRouter } from "next/navigation"
+import { Button } from "@/components/ui/button"
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card"
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table"
+import { Skeleton } from "@/components/ui/skeleton"
+import { getLeaderboard } from "@/actions/leaderboard"
+import { Trophy, Medal, ArrowLeft } from "lucide-react"
+
+interface LeaderboardEntry {
+  rank: number
+  name: string
+  phone: string
+  correctCount: number
+  totalQuestions: number
+  completedAt: string
+}
+
+function RankIcon({ rank }: { rank: number }) {
+  if (rank === 1)
+    return <Trophy className="h-5 w-5 text-amber-500 inline mr-1" />
+  if (rank === 2)
+    return <Medal className="h-5 w-5 text-gray-400 inline mr-1" />
+  if (rank === 3)
+    return <Medal className="h-5 w-5 text-amber-700 inline mr-1" />
+  return null
+}
+
+export default function LeaderboardPage() {
+  const router = useRouter()
+  const [data, setData] = useState<{
+    entries: LeaderboardEntry[]
+    total: number
+    page: number
+    totalPages: number
+  } | null>(null)
+  const [page, setPage] = useState(1)
+  const [isLoading, setIsLoading] = useState(true)
+
+  const fetchData = useCallback(async () => {
+    setIsLoading(true)
+    const result = await getLeaderboard(page)
+    setData(result)
+    setIsLoading(false)
+  }, [page])
+
+  useEffect(() => {
+    fetchData()
+  }, [fetchData])
+
+  return (
+    <div className="min-h-screen bg-gradient-to-b from-background to-muted p-4">
+      <div className="mx-auto max-w-3xl py-8">
+        <div className="flex items-center justify-between mb-8">
+          <div>
+            <h1 className="text-3xl font-bold tracking-tight">Leaderboard</h1>
+            <p className="text-muted-foreground mt-1">
+              Top performers ranked by score
+            </p>
+          </div>
+          <Button variant="outline" onClick={() => router.push("/")}>
+            <ArrowLeft className="mr-2 h-4 w-4" />
+            Home
+          </Button>
+        </div>
+
+        <Card>
+          <CardHeader>
+            <CardTitle>Rankings</CardTitle>
+          </CardHeader>
+          <CardContent>
+            {isLoading ? (
+              <div className="space-y-2">
+                {Array.from({ length: 5 }).map((_, i) => (
+                  <Skeleton key={i} className="h-12 w-full" />
+                ))}
+              </div>
+            ) : !data || data.entries.length === 0 ? (
+              <p className="text-center text-muted-foreground py-8">
+                No completed quizzes yet. Be the first!
+              </p>
+            ) : (
+              <>
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead className="w-16">Rank</TableHead>
+                      <TableHead>Name</TableHead>
+                      <TableHead>Phone</TableHead>
+                      <TableHead className="text-right">Score</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {data.entries.map((entry) => (
+                      <TableRow key={`${entry.rank}-${entry.name}`}>
+                        <TableCell className="font-medium">
+                          <RankIcon rank={entry.rank} />
+                          {entry.rank}
+                        </TableCell>
+                        <TableCell>{entry.name}</TableCell>
+                        <TableCell className="text-muted-foreground font-mono text-sm">
+                          {entry.phone}
+                        </TableCell>
+                        <TableCell className="text-right font-bold tabular-nums">
+                          {entry.correctCount}/{entry.totalQuestions}
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+
+                {data.totalPages > 1 && (
+                  <div className="flex items-center justify-between pt-4">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      disabled={page <= 1}
+                      onClick={() => setPage(page - 1)}
+                    >
+                      Previous
+                    </Button>
+                    <span className="text-sm text-muted-foreground">
+                      Page {page} of {data.totalPages}
+                    </span>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      disabled={page >= data.totalPages}
+                      onClick={() => setPage(page + 1)}
+                    >
+                      Next
+                    </Button>
+                  </div>
+                )}
+              </>
+            )}
+          </CardContent>
+        </Card>
+      </div>
+    </div>
+  )
+}

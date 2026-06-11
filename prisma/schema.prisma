@@ -1,0 +1,87 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model AdminUser {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  password  String
+  name      String?
+  createdAt DateTime @default(now())
+}
+
+model User {
+  id          String        @id @default(cuid())
+  name        String
+  phone       String        @unique
+  email       String?
+  institution String?
+  createdAt   DateTime      @default(now())
+  sessions    QuizSession[]
+}
+
+enum QuestionType {
+  MULTIPLE_CHOICE
+  CHECKBOX
+  TRUE_FALSE
+  SHORT_TEXT
+  LONG_TEXT
+}
+
+model Question {
+  id        String       @id @default(cuid())
+  text      String
+  type      QuestionType
+  order     Int          @default(0)
+  choices   Choice[]
+  responses Response[]
+  createdAt DateTime     @default(now())
+  updatedAt DateTime     @updatedAt
+}
+
+model Choice {
+  id         String   @id @default(cuid())
+  text       String
+  isCorrect  Boolean  @default(false)
+  questionId String
+  question   Question @relation(fields: [questionId], references: [id], onDelete: Cascade)
+}
+
+model QuizSession {
+  id             String     @id @default(cuid())
+  userId         String
+  user           User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  startedAt      DateTime   @default(now())
+  deadline       DateTime
+  completedAt    DateTime?
+  score          Float?
+  totalQuestions Int        @default(0)
+  responses      Response[]
+}
+
+model Response {
+  id         String      @id @default(cuid())
+  sessionId  String
+  session    QuizSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  questionId String
+  question   Question    @relation(fields: [questionId], references: [id])
+  answer     String
+  isCorrect  Boolean?
+  score      Float?
+  createdAt  DateTime    @default(now())
+  updatedAt  DateTime    @updatedAt
+
+  @@unique([sessionId, questionId])
+}
+
+model ExamSession {
+  id        String    @id @default(cuid())
+  startedAt DateTime?
+  deadline  DateTime?
+  isActive  Boolean   @default(false)
+  createdAt DateTime  @default(now())
+}
