@@ -9,7 +9,7 @@ async function requireAdmin() {
   if (!session?.user) throw new Error("Unauthorized")
 }
 
-export async function startExam() {
+export async function startExam(minutes: number) {
   await requireAdmin()
 
   try {
@@ -19,12 +19,13 @@ export async function startExam() {
     if (existing) return existing
 
     const now = new Date()
-    const deadline = new Date(now.getTime() + 30 * 60 * 1000)
+    const deadline = new Date(now.getTime() + minutes * 60 * 1000)
 
     const exam = await prisma.examSession.create({
       data: {
         startedAt: now,
         deadline,
+        durationMinutes: minutes,
         isActive: true,
       },
     })

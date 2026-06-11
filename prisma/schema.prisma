@@ -79,9 +79,10 @@ model Response {
 }
 
 model ExamSession {
-  id        String    @id @default(cuid())
-  startedAt DateTime?
-  deadline  DateTime?
-  isActive  Boolean   @default(false)
-  createdAt DateTime  @default(now())
+  id              String    @id @default(cuid())
+  startedAt       DateTime?
+  deadline        DateTime?
+  durationMinutes Int       @default(30)
+  isActive        Boolean   @default(false)
+  createdAt       DateTime  @default(now())
 }

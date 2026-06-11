@@ -3,6 +3,7 @@
 import { useState } from "react"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
+import Image from "next/image"
 import { Button, buttonVariants } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -16,7 +17,7 @@ import {
 } from "@/components/ui/dialog"
 import { toast } from "sonner"
 import { handleUserEntry } from "@/actions/entry"
-import { Brain, Trophy } from "lucide-react"
+import { Trophy } from "lucide-react"
 
 export default function LandingPage() {
   const router = useRouter()
@@ -59,12 +60,18 @@ export default function LandingPage() {
     <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-b from-background to-muted p-4">
       <div className="text-center mb-8 sm:mb-12 motion-fade-in-up">
         <div className="flex items-center justify-center gap-3 mb-4">
-          <Brain className="h-10 w-10 sm:h-12 sm:w-12 text-primary" />
+          <Image
+            src="/CGA_Logo.png"
+            alt="CGA Logo"
+            width={48}
+            height={48}
+            className="h-10 w-10 sm:h-12 sm:w-12"
+          />
           <h1 className="text-3xl sm:text-4xl font-bold tracking-tight">CGA Quiz</h1>
         </div>
         <p className="text-base sm:text-lg text-muted-foreground max-w-md">
           Test your knowledge across multiple domains with our interactive quiz
-          platform. You have 30 minutes to complete all questions.
+          platform.
         </p>
       </div>
 
@@ -107,7 +114,7 @@ export default function LandingPage() {
                 required
                 placeholder="09xxxxxxxxx"
                 inputMode="numeric"
-                pattern="09[0-9]{7,9}"
+                pattern="(09[0-9]{7})|(09[0-9]{9})"
               />
               {errors.phone?.map((e) => (
                 <p key={e} className="text-sm text-destructive">{e}</p>

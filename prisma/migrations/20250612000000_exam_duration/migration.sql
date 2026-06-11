@@ -1,0 +1,1 @@
+ALTER TABLE "ExamSession" ADD COLUMN "durationMinutes" INTEGER NOT NULL DEFAULT 30;

@@ -20,6 +20,7 @@ export function ExamControl() {
   >("loading")
   const [timeLeft, setTimeLeft] = useState<number | null>(null)
   const [isBusy, setIsBusy] = useState(false)
+  const [minutes, setMinutes] = useState(30)
 
   const refresh = useCallback(async () => {
     try {
@@ -44,8 +45,8 @@ export function ExamControl() {
   const handleStart = async () => {
     setIsBusy(true)
     try {
-      await startExam()
-      toast.success("Exam started!")
+      await startExam(minutes)
+      toast.success(`Exam started! (${minutes} min)`)
       await refresh()
     } catch {
       toast.error("Failed to start exam")
@@ -117,6 +118,22 @@ export function ExamControl() {
             <p className="text-sm text-muted-foreground">
               Exam not started
             </p>
+            <div className="flex items-center justify-center gap-2">
+              <label className="text-sm text-muted-foreground">
+                Duration:
+              </label>
+              <input
+                type="number"
+                value={minutes}
+                onChange={(e) =>
+                  setMinutes(Math.max(1, Math.min(180, Number(e.target.value))))
+                }
+                min={1}
+                max={180}
+                className="h-8 w-16 rounded-lg border border-input bg-transparent px-2 text-center text-sm outline-none"
+              />
+              <span className="text-sm text-muted-foreground">min</span>
+            </div>
           </div>
         )}
 

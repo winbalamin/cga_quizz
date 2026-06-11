@@ -4,7 +4,7 @@ export const phoneEntrySchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters").max(100),
   phone: z
     .string()
-    .regex(/^09\d{7,9}$/, "Phone must start with 09 and be 9–11 digits"),
+    .regex(/^09(\d{7}|\d{9})$/, "Phone must be 9 or 11 digits starting with 09"),
 })
 
 export type PhoneEntryInput = z.infer<typeof phoneEntrySchema>

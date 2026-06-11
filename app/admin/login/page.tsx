@@ -2,6 +2,7 @@
 
 import { useState } from "react"
 import { useRouter } from "next/navigation"
+import Image from "next/image"
 import { signIn } from "next-auth/react"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -44,13 +45,21 @@ export default function AdminLoginPage() {
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-muted">
-      <Card className="w-full max-w-sm">
-        <CardHeader>
-          <CardTitle>Admin Login</CardTitle>
-          <CardDescription>
-            Sign in to access the admin panel
-          </CardDescription>
-        </CardHeader>
+      <div className="flex flex-col items-center gap-6">
+        <Image
+          src="/CGA_Logo.png"
+          alt="CGA Logo"
+          width={64}
+          height={64}
+          className="h-16 w-16"
+        />
+        <Card className="w-full max-w-sm">
+          <CardHeader>
+            <CardTitle>Admin Login</CardTitle>
+            <CardDescription>
+              Sign in to access the admin panel
+            </CardDescription>
+          </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="space-y-2">
@@ -80,7 +89,8 @@ export default function AdminLoginPage() {
             </Button>
           </form>
         </CardContent>
-      </Card>
+        </Card>
+      </div>
     </div>
   )
 }
