@@ -33,7 +33,7 @@ export async function gradeSession(sessionId: string) {
     switch (question.type) {
       case "MULTIPLE_CHOICE":
       case "TRUE_FALSE": {
-        const correctChoice = question.choices.find((c) => c.isCorrect)
+        const correctChoice = question.choices.find((c: any) => c.isCorrect)
         if (correctChoice && response.answer === correctChoice.id) {
           isCorrect = true
           score = 1
