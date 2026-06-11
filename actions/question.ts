@@ -152,7 +152,7 @@ export async function importQuestionsFromCSV(
           choiceTexts = ["True", "False"]
         } else {
           const raw = row.choices || ""
-          choiceTexts = raw.split("|").map((s) => s.trim()).filter(Boolean)
+          choiceTexts = raw.split("|").map((s: string) => s.trim()).filter(Boolean)
         }
 
         if (choiceTexts.length < 2) {
@@ -163,15 +163,15 @@ export async function importQuestionsFromCSV(
         const rawCorrect = row.correct?.trim() || ""
         const correctIndices = rawCorrect
           .split(",")
-          .map((s) => Number(s.trim()))
-          .filter((n) => !isNaN(n))
+          .map((s: string) => Number(s.trim()))
+          .filter((n: number) => !isNaN(n))
 
         const choices = choiceTexts.map((text, ci) => ({
           text,
           isCorrect: correctIndices.includes(ci),
         }))
 
-        const correctCount = choices.filter((c) => c.isCorrect).length
+        const correctCount = choices.filter((c: { isCorrect: boolean }) => c.isCorrect).length
 
         if (type === "MULTIPLE_CHOICE" && correctCount !== 1) {
           failed.push({

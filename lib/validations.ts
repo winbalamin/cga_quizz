@@ -43,7 +43,9 @@ export const questionSchema = z
         })
       }
       const correctCount =
-        data.choices?.filter((c) => c.isCorrect).length ?? 0
+        data.choices?.filter(
+          (c: { isCorrect: boolean }) => c.isCorrect
+        ).length ?? 0
       if (data.type === "MULTIPLE_CHOICE" && correctCount !== 1) {
         ctx.addIssue({
           code: z.ZodIssueCode.custom,
@@ -62,11 +64,13 @@ export const questionSchema = z
     if (data.type === "TRUE_FALSE") {
       const hasTrue =
         data.choices?.some(
-          (c) => c.isCorrect && c.text.toLowerCase() === "true"
+          (c: { isCorrect: boolean; text: string }) =>
+            c.isCorrect && c.text.toLowerCase() === "true"
         ) ?? false
       const hasFalse =
         data.choices?.some(
-          (c) => c.isCorrect && c.text.toLowerCase() === "false"
+          (c: { isCorrect: boolean; text: string }) =>
+            c.isCorrect && c.text.toLowerCase() === "false"
         ) ?? false
       if (!hasTrue && !hasFalse) {
         ctx.addIssue({

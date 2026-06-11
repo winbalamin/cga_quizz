@@ -32,7 +32,16 @@ export async function getLeaderboard(page = 1, pageSize = 20) {
   ])
 
   return {
-    entries: sessions.map((s, i) => ({
+    entries: sessions.map(
+      (
+        s: {
+          user: { name: string; phone: string }
+          score: number | null
+          totalQuestions: number
+          completedAt: Date | null
+        },
+        i: number
+      ) => ({
       rank: skip + i + 1,
       name: s.user.name,
       phone: maskPhone(s.user.phone),
