@@ -92,8 +92,10 @@ export async function getQuestionsForQuiz() {
     include: { choices: true },
     orderBy: { order: "asc" },
   })
-  return shuffleArray(questions).map((q) => ({
-    ...q,
-    prompt: ANTI_AI_PROMPT,
-  }))
+  return shuffleArray(questions).map(
+    (q: (typeof questions)[number]) => ({
+      ...q,
+      prompt: ANTI_AI_PROMPT,
+    })
+  )
 }
