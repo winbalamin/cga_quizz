@@ -33,7 +33,9 @@ export async function gradeSession(sessionId: string) {
     switch (question.type) {
       case "MULTIPLE_CHOICE":
       case "TRUE_FALSE": {
-        const correctChoice = question.choices.find((c: any) => c.isCorrect)
+        const correctChoice = question.choices.find(
+          (c: { isCorrect: boolean; id: string }) => c.isCorrect
+        )
         if (correctChoice && response.answer === correctChoice.id) {
           isCorrect = true
           score = 1
@@ -45,8 +47,8 @@ export async function gradeSession(sessionId: string) {
         try {
           const selectedIds: string[] = JSON.parse(response.answer)
           const correctIds = question.choices
-            .filter((c) => c.isCorrect)
-            .map((c) => c.id)
+            .filter((c: { isCorrect: boolean; id: string }) => c.isCorrect)
+            .map((c: { id: string }) => c.id)
           if (
             selectedIds.length === correctIds.length &&
             selectedIds.every((id) => correctIds.includes(id))
@@ -67,8 +69,8 @@ export async function gradeSession(sessionId: string) {
       case "SHORT_TEXT":
       case "LONG_TEXT": {
         const correctAnswers = question.choices
-          .filter((c) => c.isCorrect)
-          .map((c) => c.text.trim().toLowerCase())
+          .filter((c: { isCorrect: boolean; text: string }) => c.isCorrect)
+          .map((c: { text: string }) => c.text.trim().toLowerCase())
         const userAnswer = response.answer.trim().toLowerCase()
         if (correctAnswers.some((ca) => ca === userAnswer)) {
           isCorrect = true
