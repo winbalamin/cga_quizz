@@ -50,16 +50,28 @@ export default function LeaderboardPage() {
   } | null>(null)
   const [page, setPage] = useState(1)
   const [isLoading, setIsLoading] = useState(true)
+  const [isRefetching, setIsRefetching] = useState(false)
 
-  const fetchData = useCallback(async () => {
-    setIsLoading(true)
-    const result = await getLeaderboard(page)
-    setData(result)
-    setIsLoading(false)
-  }, [page])
+  const fetchData = useCallback(
+    async (showSkeleton = false) => {
+      if (showSkeleton) setIsLoading(true)
+      else setIsRefetching(true)
+
+      const result = await getLeaderboard(page)
+      setData(result)
+      setIsLoading(false)
+      setIsRefetching(false)
+    },
+    [page]
+  )
 
   useEffect(() => {
-    fetchData()
+    fetchData(true)
+  }, [fetchData])
+
+  useEffect(() => {
+    const interval = setInterval(() => fetchData(false), 5000)
+    return () => clearInterval(interval)
   }, [fetchData])
 
   return (
@@ -67,7 +79,16 @@ export default function LeaderboardPage() {
       <div className="mx-auto max-w-3xl py-8">
         <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between mb-8">
           <div>
-            <h1 className="text-2xl sm:text-3xl font-bold tracking-tight">Leaderboard</h1>
+             <h1 className="text-2xl sm:text-3xl font-bold tracking-tight">
+              Leaderboard
+              <span className="ml-2 inline-flex items-center gap-1 text-xs font-normal text-green-600 align-middle">
+                <span className="relative flex h-2 w-2">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75" />
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500" />
+                </span>
+                LIVE
+              </span>
+            </h1>
             <p className="text-muted-foreground mt-1">
               Top performers ranked by score
             </p>

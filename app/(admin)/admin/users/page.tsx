@@ -20,14 +20,17 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
 import { Trash2, RotateCcw } from "lucide-react"
-import { getUsers, deleteUser, resetUserSession } from "@/actions/user"
+import { getUsers, deleteUser, resetUserSession, deleteAllUsers } from "@/actions/user"
 
 export default async function AdminUsersPage() {
   const users = await getUsers()
 
   return (
-    <div className="motion-fade-in-up">
-      <h1 className="text-2xl font-bold mb-6">Users</h1>
+    <div>
+      <div className="flex items-center justify-between mb-6">
+        <h1 className="text-2xl font-bold">Users</h1>
+        {users.length > 0 && <DeleteAllButton />}
+      </div>
 
       {users.length === 0 ? (
         <p className="text-muted-foreground">No users registered yet.</p>
@@ -126,5 +129,41 @@ function ResetSessionButton({ userId }: { userId: string }) {
         <RotateCcw className="h-4 w-4" />
       </Button>
     </form>
+  )
+}
+
+function DeleteAllButton() {
+  return (
+    <AlertDialog>
+      <AlertDialogTrigger
+        render={
+          <Button variant="destructive" size="sm">
+            <Trash2 className="mr-2 h-4 w-4" />
+            Delete All Users
+          </Button>
+        }
+      />
+      <AlertDialogContent>
+        <AlertDialogHeader>
+          <AlertDialogTitle>Delete All Users</AlertDialogTitle>
+          <AlertDialogDescription>
+            This will permanently delete ALL users, their quiz sessions, and all responses. This action cannot be undone.
+          </AlertDialogDescription>
+        </AlertDialogHeader>
+        <AlertDialogFooter>
+          <AlertDialogCancel>Cancel</AlertDialogCancel>
+          <form
+            action={async () => {
+              "use server"
+              await deleteAllUsers()
+            }}
+          >
+            <AlertDialogAction type="submit">
+              Delete All
+            </AlertDialogAction>
+          </form>
+        </AlertDialogFooter>
+      </AlertDialogContent>
+    </AlertDialog>
   )
 }

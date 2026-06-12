@@ -22,7 +22,7 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
 import { Plus, Pencil, Trash2 } from "lucide-react"
-import { getQuestions, deleteQuestion } from "@/actions/question"
+import { getQuestions, deleteQuestion, deleteAllQuestions } from "@/actions/question"
 import { cn } from "@/lib/utils"
 import { CSVImportDialog } from "@/components/CSVImportDialog"
 
@@ -42,6 +42,7 @@ export default async function AdminQuestionsPage() {
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between mb-6">
         <h1 className="text-xl sm:text-2xl font-bold">Questions</h1>
         <div className="flex items-center gap-2">
+          {questions.length > 0 && <DeleteAllButton />}
           <CSVImportDialog />
           <Link
             href="/admin/questions/new"
@@ -123,6 +124,40 @@ function DeleteQuestionButton({ id }: { id: string }) {
             }}
           >
             <AlertDialogAction type="submit">Delete</AlertDialogAction>
+          </form>
+        </AlertDialogFooter>
+      </AlertDialogContent>
+    </AlertDialog>
+  )
+}
+
+function DeleteAllButton() {
+  return (
+    <AlertDialog>
+      <AlertDialogTrigger
+        render={
+          <Button variant="destructive" size="sm">
+            <Trash2 className="mr-2 h-4 w-4" />
+            Delete All
+          </Button>
+        }
+      />
+      <AlertDialogContent>
+        <AlertDialogHeader>
+          <AlertDialogTitle>Delete All Questions</AlertDialogTitle>
+          <AlertDialogDescription>
+            This will permanently delete ALL questions, choices, and responses. This action cannot be undone.
+          </AlertDialogDescription>
+        </AlertDialogHeader>
+        <AlertDialogFooter>
+          <AlertDialogCancel>Cancel</AlertDialogCancel>
+          <form
+            action={async () => {
+              "use server"
+              await deleteAllQuestions()
+            }}
+          >
+            <AlertDialogAction type="submit">Delete All</AlertDialogAction>
           </form>
         </AlertDialogFooter>
       </AlertDialogContent>

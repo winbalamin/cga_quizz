@@ -114,7 +114,7 @@ export default function LandingPage() {
                 required
                 placeholder="09xxxxxxxxx"
                 inputMode="numeric"
-                pattern="(09[0-9]{7})|(09[0-9]{9})"
+                pattern="09[0-9]{7,9}"
               />
               {errors.phone?.map((e) => (
                 <p key={e} className="text-sm text-destructive">{e}</p>

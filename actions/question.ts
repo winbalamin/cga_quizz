@@ -89,6 +89,14 @@ export async function deleteQuestion(id: string) {
   revalidatePath("/admin/questions")
 }
 
+export async function deleteAllQuestions() {
+  await requireAdmin()
+  await prisma.response.deleteMany()
+  await prisma.choice.deleteMany()
+  await prisma.question.deleteMany()
+  revalidatePath("/admin/questions")
+}
+
 export type ImportResult = {
   success: number
   failed: { row: number; error: string }[]

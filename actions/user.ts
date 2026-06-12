@@ -37,3 +37,11 @@ export async function resetUserSession(userId: string) {
   await prisma.quizSession.deleteMany({ where: { userId } })
   revalidatePath("/admin/users")
 }
+
+export async function deleteAllUsers() {
+  await requireAdmin()
+  await prisma.quizSession.deleteMany()
+  await prisma.response.deleteMany()
+  await prisma.user.deleteMany()
+  revalidatePath("/admin/users")
+}
