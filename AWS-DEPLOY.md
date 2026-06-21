@@ -124,8 +124,8 @@ nano .env
 ```
 
 ```ini
-DATABASE_URL="postgresql://cgaadmin:your-strong-password@localhost:5432/cgaquizz?schema=public"
-AUTH_SECRET="your-generated-secret-key"
+    DATABASE_URL="postgresql://cgaadmin:your-strong-password@localhost:5432/cgaquizz?schema=public"
+    AUTH_SECRET="your-generated-secret-key"
 ```
 
 Generate `AUTH_SECRET`:
