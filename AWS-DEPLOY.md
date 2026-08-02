@@ -85,7 +85,7 @@ GRANT ALL ON SCHEMA public TO cgaadmin;
 Update PostgreSQL auth to allow password login:
 
 ```bash
-sudo nano /etc/postgresql/16/main/pg_hba.conf
+sudo nano /etc/postgresql/18/main/pg_hba.conf
 
 # Change this line:
 # local   all   all   peer
@@ -105,14 +105,14 @@ mkdir -p /var/www
 cd /var/www
 
 # Clone your repo (or use scp to upload)
-git clone https://github.com/YOUR_USERNAME/cga_quizz.git
+sudo git clone https://github.com/winbalamin/cga_quizz.git
 cd cga_quizz
 
 # Install dependencies
-npm install
+sudo npm install
 
 # Generate Prisma client
-npx prisma generate
+sudo npx prisma generate
 ```
 
 ---
@@ -120,7 +120,7 @@ npx prisma generate
 ## 6. Environment Variables
 
 ```bash
-nano .env
+sudo nano .env
 ```
 
 ```ini

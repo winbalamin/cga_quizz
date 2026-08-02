@@ -18,7 +18,7 @@ import {
 } from "@/components/ui/table"
 import { Skeleton } from "@/components/ui/skeleton"
 import { Trophy, Medal, Download } from "lucide-react"
-import { getAdminResults, exportResultsCSV } from "@/actions/results"
+import { getAdminResults, exportResultsCSV, exportDetailedResultsCSV } from "@/actions/results"
 import { toast } from "sonner"
 
 interface ResultEntry {
@@ -44,6 +44,7 @@ export default function AdminResultsPage() {
   const [results, setResults] = useState<ResultEntry[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [isExporting, setIsExporting] = useState(false)
+  const [isExportingDetailed, setIsExportingDetailed] = useState(false)
 
   const fetchResults = useCallback(async () => {
     setIsLoading(true)
@@ -77,14 +78,45 @@ export default function AdminResultsPage() {
     }
   }
 
+  const handleDetailedExport = async () => {
+    setIsExportingDetailed(true)
+    try {
+      const csv = await exportDetailedResultsCSV()
+      const blob = new Blob([csv], { type: "text/csv;charset=utf-8" })
+      const url = URL.createObjectURL(blob)
+      const a = document.createElement("a")
+      a.href = url
+      a.download = "cga_quiz_detailed_results.csv"
+      document.body.appendChild(a)
+      a.click()
+      document.body.removeChild(a)
+      URL.revokeObjectURL(url)
+      toast.success("Detailed CSV exported")
+    } catch {
+      toast.error("Export failed")
+    } finally {
+      setIsExportingDetailed(false)
+    }
+  }
+
   return (
     <div>
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between mb-6">
         <h1 className="text-xl sm:text-2xl font-bold">Results</h1>
-        <Button onClick={handleExport} disabled={isExporting || results.length === 0}>
-          <Download className="mr-2 h-4 w-4" />
-          {isExporting ? "Exporting..." : "Export CSV"}
-        </Button>
+        <div className="flex flex-wrap gap-2">
+          <Button onClick={handleExport} disabled={isExporting || results.length === 0}>
+            <Download className="mr-2 h-4 w-4" />
+            {isExporting ? "Exporting..." : "Export Summary CSV"}
+          </Button>
+          <Button
+            variant="outline"
+            onClick={handleDetailedExport}
+            disabled={isExportingDetailed || results.length === 0}
+          >
+            <Download className="mr-2 h-4 w-4" />
+            {isExportingDetailed ? "Exporting..." : "Export Detailed CSV"}
+          </Button>
+        </div>
       </div>
 
       <Card className="motion-fade-in-up motion-delay-1">
