@@ -11,7 +11,8 @@ import { getExamStatus } from "@/actions/exam"
 import { getOrCreateSession, getQuestionsForQuiz } from "@/actions/session"
 import { saveResponse, submitQuiz } from "@/actions/response"
 import { toast } from "sonner"
-import { ChevronLeft, ChevronRight, Flag, Clock } from "lucide-react"
+import { ChevronLeft, ChevronRight, Flag, Clock, AlertTriangle } from "lucide-react"
+import { Badge } from "@/components/ui/badge"
 import type { Question, Choice } from "@prisma/client"
 
 type QuestionWithChoices = Question & { choices: Choice[]; prompt?: string }
@@ -98,6 +99,12 @@ function QuizContent() {
   const isFirst = currentIndex === 0
   const isLast = currentIndex === questions.length - 1
   const answeredCount = Object.keys(answers).length
+  const unansweredIndices: number[] = []
+  for (let i = 0; i < questions.length; i++) {
+    if (!answers[questions[i].id]) {
+      unansweredIndices.push(i)
+    }
+  }
 
   const handleAnswer = useCallback(
     (questionId: string, answer: string) => {
@@ -203,6 +210,30 @@ function QuizContent() {
               onAnswer={(answer) => handleAnswer(currentQuestion.id, answer)}
             />
           </div>
+
+          {isLast && unansweredIndices.length > 0 && (
+            <div className="rounded-lg border border-amber-200 bg-amber-50 p-4 dark:border-amber-800 dark:bg-amber-950/30">
+              <div className="flex items-center gap-2 mb-2">
+                <AlertTriangle className="h-4 w-4 text-amber-600 dark:text-amber-400" />
+                <p className="text-sm font-medium text-amber-800 dark:text-amber-300">
+                  You have {unansweredIndices.length} unanswered question
+                  {unansweredIndices.length !== 1 ? "s" : ""}
+                </p>
+              </div>
+              <div className="flex flex-wrap gap-1.5">
+                {unansweredIndices.map((idx) => (
+                  <Badge
+                    key={idx}
+                    variant="outline"
+                    className="cursor-pointer border-amber-300 bg-amber-100 text-amber-800 hover:bg-amber-200 dark:border-amber-700 dark:bg-amber-900/50 dark:text-amber-300 dark:hover:bg-amber-800/50 transition-colors"
+                    onClick={() => goTo(idx)}
+                  >
+                    #{idx + 1}
+                  </Badge>
+                ))}
+              </div>
+            </div>
+          )}
 
           <div className="flex flex-col-reverse gap-2 sm:flex-row sm:items-center sm:justify-between pt-4">
             <Button

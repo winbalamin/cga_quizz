@@ -139,10 +139,10 @@ node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
 
 ```bash
 # Apply database migrations
-npx prisma migrate deploy
+sudo npx prisma migrate deploy
 
 # Seed admin user + sample questions
-npx tsx prisma/seed.ts
+sudo npx tsx prisma/seed.ts
 ```
 
 ---
@@ -151,14 +151,14 @@ npx tsx prisma/seed.ts
 
 ```bash
 # Build the app
-npm run build
+sudo npm run build
 
 # Start with PM2
-pm2 start npm --name "cga-quiz" -- start
+sudo pm2 start npm --name "cga-quiz" -- start
 
 # Save PM2 process list (auto-restart on reboot)
-pm2 save
-pm2 startup systemd
+sudo pm2 save
+sudo pm2 startup systemd
 # Run the command PM2 outputs
 ```
 
