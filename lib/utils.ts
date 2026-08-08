@@ -21,3 +21,19 @@ export function shuffleArray<T>(array: T[]): T[] {
   }
   return shuffled
 }
+
+const MMT_OFFSET = 6.5 * 60 * 60 * 1000
+
+export function formatMyanmarTime(date: Date | string): string {
+  const d = typeof date === "string" ? new Date(date) : date
+  const local = new Date(d.getTime() + MMT_OFFSET)
+  return local.toLocaleString("en-US", {
+    timeZone: "UTC",
+    month: "short",
+    day: "2-digit",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: true,
+  })
+}

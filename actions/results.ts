@@ -2,6 +2,7 @@
 
 import { prisma } from "@/lib/prisma"
 import { auth } from "@/lib/auth"
+import { formatMyanmarTime } from "@/lib/utils"
 
 async function requireAdmin() {
   const session = await auth()
@@ -39,6 +40,7 @@ export async function getAdminResults() {
         correctCount: Math.round(s.score!),
         totalQuestions: s.totalQuestions,
         completedAt: s.completedAt!.toISOString(),
+        completedAtFormatted: formatMyanmarTime(s.completedAt!),
       })
     )
   } catch {
@@ -67,7 +69,7 @@ export async function exportResultsCSV() {
         r.phone,
         r.correctCount,
         r.totalQuestions,
-        new Date(r.completedAt).toLocaleString(),
+        formatMyanmarTime(r.completedAt),
       ].map((v: number | string) => `"${String(v).replace(/"/g, '""')}"`)
   )
 
@@ -200,7 +202,7 @@ export async function exportDetailedResultsCSV() {
         correctAnswer,
         result,
         r.score?.toString() ?? "",
-        session.completedAt!.toLocaleString(),
+        formatMyanmarTime(session.completedAt!),
       ].map(escape)
     })
   )

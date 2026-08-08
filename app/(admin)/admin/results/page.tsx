@@ -28,6 +28,7 @@ interface ResultEntry {
   correctCount: number
   totalQuestions: number
   completedAt: string
+  completedAtFormatted: string
 }
 
 function RankIcon({ rank }: { rank: number }) {
@@ -143,7 +144,7 @@ export default function AdminResultsPage() {
                   <TableHead>Name</TableHead>
                   <TableHead>Phone</TableHead>
                   <TableHead className="text-right">Score</TableHead>
-                  <TableHead className="text-right w-40">Completed</TableHead>
+                  <TableHead className="text-right w-40">Time (MMT)</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -161,7 +162,7 @@ export default function AdminResultsPage() {
                       {entry.correctCount}/{entry.totalQuestions}
                     </TableCell>
                     <TableCell className="text-right text-xs text-muted-foreground">
-                      {new Date(entry.completedAt).toLocaleString()}
+                      {entry.completedAtFormatted}
                     </TableCell>
                   </TableRow>
                 ))}

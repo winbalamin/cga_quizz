@@ -99,6 +99,7 @@ export async function gradeSession(sessionId: string) {
     score: finalScore,
     totalQuestions,
     correctCount: Math.round(totalScore),
+    completedAt: session.completedAt!.toISOString(),
   }
 }
 
@@ -122,5 +123,6 @@ export async function getSessionResult(sessionId: string) {
     score: session.score,
     totalQuestions: session.totalQuestions,
     correctCount,
+    completedAt: session.completedAt!.toISOString(),
   }
 }

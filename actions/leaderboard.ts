@@ -1,6 +1,7 @@
 "use server"
 
 import { prisma } from "@/lib/prisma"
+import { formatMyanmarTime } from "@/lib/utils"
 
 function maskPhone(phone: string): string {
   if (phone.length <= 4) return phone
@@ -48,6 +49,7 @@ export async function getLeaderboard(page = 1, pageSize = 20) {
       correctCount: Math.round(s.score!),
       totalQuestions: s.totalQuestions,
       completedAt: s.completedAt!.toISOString(),
+      completedAtFormatted: formatMyanmarTime(s.completedAt!),
     })),
     total,
     page,

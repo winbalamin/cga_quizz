@@ -12,7 +12,8 @@ import {
 } from "@/components/ui/card"
 import { Skeleton } from "@/components/ui/skeleton"
 import { getSessionResult } from "@/actions/grading"
-import { Trophy, Target, CheckCircle2 } from "lucide-react"
+import { formatMyanmarTime } from "@/lib/utils"
+import { Trophy, Target, CheckCircle2, Clock } from "lucide-react"
 
 function ResultContent() {
   const searchParams = useSearchParams()
@@ -23,6 +24,7 @@ function ResultContent() {
     score: number
     totalQuestions: number
     correctCount: number
+    completedAt?: string
   } | null>(null)
   const [isLoading, setIsLoading] = useState(true)
 
@@ -82,6 +84,15 @@ function ResultContent() {
               <p className="text-xs text-muted-foreground">Total</p>
             </div>
           </div>
+
+          {result?.completedAt && (
+            <div className="flex justify-center motion-fade-in-up motion-delay-3">
+              <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                <Clock className="h-4 w-4" />
+                <span>Completed: {formatMyanmarTime(result.completedAt)}</span>
+              </div>
+            </div>
+          )}
 
           <div className="flex flex-col gap-3 pt-4 motion-fade-in-up motion-delay-3">
             <Button className="motion-press" onClick={() => router.push("/leaderboard")}>
