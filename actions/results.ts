@@ -21,28 +21,26 @@ export async function getAdminResults() {
       include: {
         user: { select: { name: true, phone: true } },
       },
-      orderBy: [{ score: "desc" }, { completedAt: "asc" }],
     })
 
-    return sessions.map(
-      (
-        s: {
-          user: { name: string; phone: string }
-          score: number | null
-          totalQuestions: number
-          completedAt: Date | null
-        },
-        i: number
-      ) => ({
-        rank: i + 1,
-        name: s.user.name,
-        phone: s.user.phone,
-        correctCount: Math.round(s.score!),
-        totalQuestions: s.totalQuestions,
-        completedAt: s.completedAt!.toISOString(),
-        completedAtFormatted: formatMyanmarTime(s.completedAt!),
-      })
-    )
+    const ranked = [...sessions].sort((a, b) => {
+      const scoreDiff = Math.round(b.score ?? 0) - Math.round(a.score ?? 0)
+      if (scoreDiff !== 0) return scoreDiff
+
+      const aTime = a.completedAt ? a.completedAt.getTime() : 0
+      const bTime = b.completedAt ? b.completedAt.getTime() : 0
+      return aTime - bTime
+    })
+
+    return ranked.map((s, i) => ({
+      rank: i + 1,
+      name: s.user.name,
+      phone: s.user.phone,
+      correctCount: Math.round(s.score ?? 0),
+      totalQuestions: s.totalQuestions,
+      completedAt: s.completedAt!.toISOString(),
+      completedAtFormatted: formatMyanmarTime(s.completedAt!),
+    }))
   } catch {
     return []
   }

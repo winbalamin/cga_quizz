@@ -11,7 +11,7 @@ function maskPhone(phone: string): string {
 export async function getLeaderboard(page = 1, pageSize = 20) {
   const skip = (page - 1) * pageSize
 
-  const [sessions, total] = await Promise.all([
+  const [allSessions, total] = await Promise.all([
     prisma.quizSession.findMany({
       where: {
         completedAt: { not: null },
@@ -20,9 +20,6 @@ export async function getLeaderboard(page = 1, pageSize = 20) {
       include: {
         user: { select: { name: true, phone: true } },
       },
-      orderBy: [{ score: "desc" }, { completedAt: "asc" }],
-      skip,
-      take: pageSize,
     }),
     prisma.quizSession.count({
       where: {
@@ -32,21 +29,23 @@ export async function getLeaderboard(page = 1, pageSize = 20) {
     }),
   ])
 
+  const ranked = [...allSessions].sort((a, b) => {
+    const scoreDiff = Math.round(b.score ?? 0) - Math.round(a.score ?? 0)
+    if (scoreDiff !== 0) return scoreDiff
+
+    const aTime = a.completedAt ? a.completedAt.getTime() : 0
+    const bTime = b.completedAt ? b.completedAt.getTime() : 0
+    return aTime - bTime
+  })
+
+  const sessions = ranked.slice(skip, skip + pageSize)
+
   return {
-    entries: sessions.map(
-      (
-        s: {
-          user: { name: string; phone: string }
-          score: number | null
-          totalQuestions: number
-          completedAt: Date | null
-        },
-        i: number
-      ) => ({
+    entries: sessions.map((s, i) => ({
       rank: skip + i + 1,
       name: s.user.name,
       phone: maskPhone(s.user.phone),
-      correctCount: Math.round(s.score!),
+      correctCount: Math.round(s.score ?? 0),
       totalQuestions: s.totalQuestions,
       completedAt: s.completedAt!.toISOString(),
       completedAtFormatted: formatMyanmarTime(s.completedAt!),
