@@ -9,7 +9,7 @@ import { QuizWatermark } from "@/components/QuizWatermark"
 import { useExamTimer } from "@/hooks/useExamTimer"
 import { getExamStatus } from "@/actions/exam"
 import { getOrCreateSession, getQuestionsForQuiz } from "@/actions/session"
-import { saveResponse, submitQuiz } from "@/actions/response"
+import { saveResponse, finalizeQuiz } from "@/actions/response"
 import { toast } from "sonner"
 import { ChevronLeft, ChevronRight, Flag, Clock, AlertTriangle } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
@@ -31,6 +31,7 @@ function QuizContent() {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const isSubmittingRef = useRef(false)
   const initializedRef = useRef(false)
+  const pendingSavesRef = useRef<Promise<unknown>[]>([])
 
   const { timeLeft, formatted, isExpired, isLoading: timerLoading, examStatus } =
     useExamTimer()
@@ -40,7 +41,9 @@ function QuizContent() {
     isSubmittingRef.current = true
     setIsSubmitting(true)
     try {
-      await submitQuiz(sessionId)
+      await Promise.allSettled(pendingSavesRef.current)
+      pendingSavesRef.current = []
+      await finalizeQuiz(sessionId)
       toast.success("Quiz submitted!")
       router.push(`/quiz/result?sessionId=${sessionId}`)
     } catch {
@@ -110,7 +113,20 @@ function QuizContent() {
     (questionId: string, answer: string) => {
       setAnswers((prev) => ({ ...prev, [questionId]: answer }))
       if (sessionId) {
-        saveResponse(sessionId, questionId, answer)
+        const pending = saveResponse(sessionId, questionId, answer)
+        pendingSavesRef.current.push(pending)
+        pending.then(
+          () => {
+            pendingSavesRef.current = pendingSavesRef.current.filter(
+              (p) => p !== pending
+            )
+          },
+          () => {
+            pendingSavesRef.current = pendingSavesRef.current.filter(
+              (p) => p !== pending
+            )
+          }
+        )
       }
     },
     [sessionId]

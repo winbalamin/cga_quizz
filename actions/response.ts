@@ -1,6 +1,7 @@
 "use server"
 
 import { prisma } from "@/lib/prisma"
+import { gradeSession } from "@/actions/grading"
 
 const INJECTION_PATTERNS = [
   /ignore\s+(previous|all|above|prior|earlier)\s+(instructions?|prompts?|text)/gi,
@@ -44,6 +45,15 @@ export async function submitQuiz(sessionId: string) {
     where: { id: sessionId },
     data: { completedAt: now },
   })
+}
+
+export async function finalizeQuiz(sessionId: string) {
+  await prisma.quizSession.updateMany({
+    where: { id: sessionId, completedAt: null },
+    data: { completedAt: new Date() },
+  })
+
+  return gradeSession(sessionId)
 }
 
 export async function getResponsesForSession(sessionId: string) {
